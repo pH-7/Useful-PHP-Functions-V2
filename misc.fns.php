@@ -206,13 +206,13 @@ function exec_file_query($oDb, $sSqlFile, $sOldPrefix = null, $sNewPrefix = null
 }
 
 /**
- * Generate ID.
+ * Generate Hash.
  *
  * @param integer $iLength Default 80
  * @return string The random hash. Maximum 128 characters with whirlpool encryption.
  */
-function generate_id($iLength = 80) {
-    return substr(hash('whirlpool', time() . hash('sha512', getenv('REMOTE_ADDR') . uniqid(mt_rand(), true) . microtime(true)*999999999999)), 0, $iLength);
+function generate_hash($iLength = 80) {
+    return substr(hash('whirlpool', time() . hash('sha512', client_ip() . uniqid(mt_rand(), true) . microtime(true)*999999999999)), 0, $iLength);
 }
 
 /**
