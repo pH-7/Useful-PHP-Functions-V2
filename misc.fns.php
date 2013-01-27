@@ -9,7 +9,7 @@
  */
 
 /**
- * Gets list of name of directories inside a directory.
+ * Get the list of name of directories inside a directory.
  *
  * @param string $sDir
  * @return array
@@ -37,12 +37,9 @@ function get_dir_list($sDir) {
  */
 function is_directory($sDir) {
     $sPathProtected = check_ext_start(check_ext_end(trim($sDir)));
-    if(is_dir($sPathProtected)) {
-        if(is_writable($sPathProtected)) {
+    if(is_dir($sPathProtected))
+        if(is_writable($sPathProtected))
             return true;
-        }
-    }
-
     return false;
 }
 
@@ -425,7 +422,8 @@ function check_url($sUrl) {
 }
 
 /**
- * Gets Browser User Language.
+ * Detect the user's preferred language.
+ *
  * @return string The first two lowercase letter of the browser language.
  */
 function get_browser_lang() {
