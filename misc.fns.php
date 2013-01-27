@@ -98,8 +98,8 @@ function validate_password($sPassword, $iMin = 6, $iMax = 92) {
     if(empty($sPassword)) return 'empty';
     else if(strlen($sPassword) < $iMin) return 'tooshort';
     else if(strlen($sPassword) > $iMax) return 'toolong';
-    else if(!preg_match('#[0-9]{1,}#', $sPassword)) return 'nonumber';
-    else if(!preg_match('#[A-Z]{1,}#', $sPassword)) return 'noupper';
+    else if(!preg_match('/[0-9]{1,}/', $sPassword)) return 'nonumber';
+    else if(!preg_match('/[A-Z]{1,}/', $sPassword)) return 'noupper';
     else return 'ok';
 }
 
@@ -136,13 +136,10 @@ function validate_name($sName, $iMin = 2, $iMax = 30) {
  * @return boolean
  */
 function filled_out($aVars) {
-    foreach($aVars as $sKey => $sValue) {
-        if((!isset($sKey)) || ($sValue == '')) {
+    foreach($aVars as $sKey => $sValue)
+        if((!isset($sKey)) || ($sValue == ''))
             return false;
-        }
-        return true;
-    }
-    return false; // Default value
+    return true;
 }
 
 /**
@@ -179,10 +176,10 @@ function redirect($sUrl, $bPermanent = true) {
  */
 function delete_dir($sPath) {
     return is_file($sPath) ?
-    @unlink($sPath) :
-    is_dir($sPath) ?
-    array_map('delete_dir',glob($sPath.'/*')) === @rmdir($sPath) :
-    false;
+        @unlink($sPath) :
+        is_dir($sPath) ?
+        array_map('delete_dir', glob($sPath.'/*')) === @rmdir($sPath) :
+        false;
 }
 
 /**
@@ -192,7 +189,7 @@ function delete_dir($sPath) {
  * @param string $sSqlFile SQL File.
  * @param string $sOldPrefix Default NULL
  * @param string $sNewPrefix Default NULL
- * @return boolean
+ * @return mixed (boolean | array) Returns TRUE if there are no errors, otherwise returns an ARRAY of error information.
  */
 function exec_file_query($oDb, $sSqlFile, $sOldPrefix = null, $sNewPrefix = null) {
     if(!is_file($sSqlFile)) return false;
@@ -284,22 +281,22 @@ function ifsetor($sVar, $sOr = '') {
 }
 
 /**
- * Gets file contents with CURL.
+ * Get the URL contents with CURL.
  *
  * @param string $sFile
- * @return string
+ * @return mixed (string | boolean) Return the result content on success, FALSE on failure.
  */
-function get_file_contents($sFile) {
+function get_url_contents($sFile) {
     $rCh = curl_init();
     curl_setopt($rCh, CURLOPT_URL, $sFile);
     curl_setopt($rCh, CURLOPT_HEADER, 0);
     curl_setopt($rCh, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($rCh, CURLOPT_FOLLOWLOCATION, 1);
-    $sResult = curl_exec($rCh);
+    $mResult = curl_exec($rCh);
     curl_close($rCh);
     unset($rCh);
 
-    return $sResult;
+    return $mResult;
 }
 
 /**
